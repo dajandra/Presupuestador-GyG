@@ -409,3 +409,32 @@ head {
     text-align: left;
     font-size: 12px;
 }
+.navMenu {
+    position: absolute;
+    width: 100%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background-color: #265073;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+  }
+
+.navMenu a {
+  color: #f6f4e6;
+  text-decoration: none;
+  font-size: 1.2em;
+  text-transform: uppercase;
+  font-weight: 500;
+  display: inline-block;
+
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  margin: 5px 100px;
+
+}
+
+.navMenu a:hover {
+  color: #b3df70;
+}

@@ -4,11 +4,15 @@ document.getElementById('agregarDatos').addEventListener('click', function () {
     var nroAfiliado = document.getElementById("nroAfiliado").value;
     var domicilio = document.getElementById("domicilio").value;
     var medico = document.getElementById("medico").value;
+    var fecha = document.getElementById("fecha").value;
+
     var numpdf = document.getElementById("numpdf").value;
 
+    document.getElementById("vista-numpdf").textContent = numpdf;
+
+    document.getElementById("vista-fecha").textContent = fecha;
 
     document.getElementById("vista-medico").textContent = medico;
-    document.getElementById("vista-numpdf").textContent = numpdf;
 
     document.getElementById("vista-afiliado").textContent = afiliado;
     document.getElementById("vista-nroAfiliado").textContent = nroAfiliado;
@@ -32,7 +36,28 @@ document.getElementById('agregarDatos').addEventListener('click', function () {
     document.getElementById("vista-observaciones").innerHTML = observaciones.replace(/\n/g, '<br>');
 
 
-    calcularTotal();
+    var montototal = document.getElementById("monto-total").value;
+
+    var sum = parseFloat(montototal);
+
+    var valor = document.getElementById('porcIVA');
+    var porcentaje = sum * valor.value / 100; // Ajusta este valor al porcentaje que deseas sumar
+    var stotal = sum.toLocaleString('es-ES');
+    var total = (sum + porcentaje).toLocaleString('es-ES'); // Agregar el formato de puntos para separar grupos
+
+    var totaliva = porcentaje.toLocaleString('es-ES');
+
+    document.getElementById('stotal').textContent = stotal;
+
+    document.getElementById('totalIVA').textContent = totaliva;
+
+
+
+    document.getElementById('total').textContent = total;
+    document.getElementById('total1').textContent = document.getElementById('total').textContent;
+    document.getElementById('stotal1').textContent = document.getElementById('stotal').textContent;
+    document.getElementById('totalIVA1').textContent = document.getElementById('totalIVA').textContent;
+
 });
 
 let contadorTablas = 1;
@@ -59,7 +84,7 @@ function agregarHoja() {
     }
 
     contadorTablas++; // Incrementar el contador de tablas
-    calcularTotal();
+
 }
 
 
@@ -78,7 +103,6 @@ function agregarItems() {
         agregar2();
     }
 
-    calcularTotal();
     // Mostrar alerta si se ha alcanzado el límite de tablas
     if (contador > 11) {
         alert('No se pueden agregar más tablas.');
@@ -102,7 +126,7 @@ function agregar1() {
 
     document.getElementById('mostrarDatos').appendChild(fila);
 
-    calcularTotal();
+    
 
 
 }
@@ -120,19 +144,9 @@ function agregar2() {
 
     document.getElementById('mostrarDatos1').appendChild(fila);
 
-    calcularTotal();
-
 
 }
 
-window.onload = function () {
-    var fecha = new Date();
-    var dia = fecha.getDate();
-    var mes = fecha.getMonth() + 1;
-    var anio = fecha.getFullYear();
-
-    document.getElementById("fecha-actual").innerHTML = "FECHA: " + dia + "/" + mes + "/" + anio;
-}
 
 
 function eliminarCeldasDeTabla(tabla) {
@@ -168,31 +182,6 @@ document.getElementById('savePdf').addEventListener('click', function () {
 
 });
 
-document.getElementById('nuevoPrep').addEventListener('click', function () {
-    incrementAndSave();
-    location.reload();
-});
-
-
-
-
-
-function calcularTotal() {
-    var sum = parseFloat(document.getElementById("montoTotal").value);
-    var valor = document.getElementById('porcIVA').value;
-    var porcentaje = sum * valor / 100; // Ajusta este valor al porcentaje que deseas sumar
-    var stotal = sum;
-    var total = (sum + porcentaje); // Agregar el formato de puntos para separar grupos
-
-    var totaliva = porcentaje.toLocaleString('es-ES');
-    var stotalFormatted = stotal.toLocaleString('es-ES');
-    var totalFormatted = total.toLocaleString('es-ES');
-
-    document.getElementById('stotal').textContent = stotalFormatted;
-    document.getElementById('totalIVA').textContent = totaliva;
-    document.getElementById('total').textContent = totalFormatted;
-    document.getElementById('total1').textContent = totalFormatted;
-}
 
 
 // Asegúrate de que este código se ejecute después de que la tabla esté creada
@@ -228,5 +217,4 @@ document.getElementById('nuevo').addEventListener('click', function () {
     location.reload()
 
 });
-
 

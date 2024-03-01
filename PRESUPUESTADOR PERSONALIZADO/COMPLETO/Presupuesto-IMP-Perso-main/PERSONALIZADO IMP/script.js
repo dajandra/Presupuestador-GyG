@@ -5,6 +5,11 @@ document.getElementById('agregarDatos').addEventListener('click', function () {
     var domicilio = document.getElementById("domicilio").value;
     var medico = document.getElementById("medico").value;
     var numpdf = document.getElementById("numpdf").value;
+    var fecha = document.getElementById("fecha").value;
+
+
+
+    document.getElementById("vista-fecha").textContent = fecha;
 
 
     document.getElementById("vista-medico").textContent = medico;
@@ -53,6 +58,8 @@ function agregarHoja() {
     tabla.id = 'mostrarDatos' + contadorTablas;
 
     document.getElementById("total").id = "total1";
+    document.getElementById("stotal").id = "stotal1";
+    document.getElementById("totalIVA").id = "totalIVA1";
 
     while (tabla.rows.length > 1) { // Empezamos desde la segunda fila (índice 1)
         tabla.deleteRow(1);
@@ -91,11 +98,17 @@ document.getElementById('agregarItems').addEventListener('click', agregarItems);
 
 function agregar1() {
     let descripcion = document.getElementById('descripcion').value;
+    let cantidad = document.getElementById('cantidad').value;
+    let precioUnitario = document.getElementById('precioUnitario').value;
+    var subtotal = cantidad * precioUnitario;
 
     let fila = document.createElement('tr');
     fila.innerHTML = `
     <tbody>
             <td><p>${descripcion.replace(/\n/g, '<br>')}</p></td>
+            <td><p>${cantidad}</p></td>
+            <td><p>${precioUnitario}</p></td>
+            <td><p>${subtotal}</p></td>
     </tbody>
     <button onclick="eliminar(this)" class="btnel"></button>
     `;
@@ -109,11 +122,17 @@ function agregar1() {
 
 function agregar2() {
     let descripcion = document.getElementById('descripcion').value;
+    let cantidad = document.getElementById('cantidad').value;
+    let precioUnitario = document.getElementById('precioUnitario').value;
+    var subtotal = cantidad * precioUnitario;
 
     let fila = document.createElement('tr');
     fila.innerHTML = `
     <tbody>
             <td><p>${descripcion.replace(/\n/g, '<br>')}</p></td>
+            <td><p>${cantidad}</p></td>
+            <td><p>${precioUnitario}</p></td>
+            <td><p>${subtotal}</p></td>
     </tbody>
     <button onclick="eliminar(this)" class="btnel"></button>
     `;
@@ -150,9 +169,13 @@ function eliminar(elemento) {
 
 
 document.getElementById('savePdf').addEventListener('click', function () {
-    var countForPDF = document.getElementById("numpdf").value;
 
-    var elements = window.document.querySelectorAll('#todo');
+    var incrementNumber = incrementAndSave();
+    var numberDiv = document.getElementById('count');
+    var countForPDF = localStorage.getItem('countForPDF');
+    numberDiv.textContent = incrementNumber;
+
+    var elements = window.document.querySelectorAll('#todoPrep, #todoPrep1');
     var opt = {
         margin: 0,
         filename: 'PRESUPUESTO IMPLANTECH ' + countForPDF + '.pdf',
@@ -168,47 +191,52 @@ document.getElementById('savePdf').addEventListener('click', function () {
 
 });
 
-document.getElementById('nuevoPrep').addEventListener('click', function () {
-    incrementAndSave();
-    location.reload();
-});
-
-
 
 
 
 function calcularTotal() {
-    var sum = parseFloat(document.getElementById("montoTotal").value);
-    var valor = document.getElementById('porcIVA').value;
-    var porcentaje = sum * valor / 100; // Ajusta este valor al porcentaje que deseas sumar
-    var stotal = sum;
-    var total = (sum + porcentaje); // Agregar el formato de puntos para separar grupos
+    var tabla1 = document.getElementById('mostrarDatos');
+    var tabla2 = document.getElementById('mostrarDatos1');
+    var sum = 0;
+
+    if (tabla1 !== null) {
+        for (var i = 0; i < tabla1.rows.length; i++) {
+            var value = tabla1.rows[i].cells[tabla1.rows[i].cells.length - 1].innerText;
+            if (!isNaN(value)) {
+                sum += parseFloat(value);
+            }
+        }
+    }
+
+    if (tabla2 !== null) {
+        for (var i = 0; i < tabla2.rows.length; i++) {
+            var value = tabla2.rows[i].cells[tabla2.rows[i].cells.length - 1].innerText;
+            if (!isNaN(value)) {
+                sum += parseFloat(value);
+            }
+        }
+    }
+
+    var valor = document.getElementById('porcIVA');
+    var porcentaje = sum * valor.value / 100; // Ajusta este valor al porcentaje que deseas sumar
+    var stotal = sum.toLocaleString('es-ES');
+    var total = (sum + porcentaje).toLocaleString('es-ES'); // Agregar el formato de puntos para separar grupos
 
     var totaliva = porcentaje.toLocaleString('es-ES');
-    var stotalFormatted = stotal.toLocaleString('es-ES');
-    var totalFormatted = total.toLocaleString('es-ES');
 
-    document.getElementById('stotal').textContent = stotalFormatted;
+
+    document.getElementById('stotal').textContent = stotal;
+
     document.getElementById('totalIVA').textContent = totaliva;
-    document.getElementById('total').textContent = totalFormatted;
-    document.getElementById('total1').textContent = totalFormatted;
+
+
+
+    document.getElementById('total').textContent = total;
+    document.getElementById('total1').textContent = document.getElementById('total').textContent;
+    document.getElementById('stotal1').textContent = document.getElementById('stotal').textContent;
+    document.getElementById('totalIVA1').textContent = document.getElementById('totalIVA').textContent;
+
 }
-
-
-// Asegúrate de que este código se ejecute después de que la tabla esté creada
-var table = document.getElementById('mostrarDatos');
-
-table.addEventListener('DOMNodeInserted', function (event) {
-    if (event.target.tagName === 'TR') {
-        calcularTotal();
-    }
-});
-
-table.addEventListener('DOMNodeRemoved', function (event) {
-    if (event.target.tagName === 'TR') {
-        calcularTotal();
-    }
-});
 
 
 
@@ -224,9 +252,37 @@ document.addEventListener('DOMContentLoaded', function () {
     //incrementAndSave();
 });
 
-document.getElementById('nuevo').addEventListener('click', function () {
-    location.reload()
-
+document.getElementById('nuevoPrep').addEventListener('click', function () {
+    incrementAndSave();
+    location.reload();
 });
 
+function incrementAndSave() {
+    var count = localStorage.getItem('incrementNumber');
+    if (!count) {
+        count = '001-346';
+    }
 
+    var parts = count.split('-');
+    var leftPart = parseInt(parts[0]);
+    var rightPart = parseInt(parts[1]);
+
+    if (rightPart < 999) {
+        rightPart++;
+    } else {
+        rightPart = 0;
+        leftPart++;
+    }
+
+    var newCount = ("000" + leftPart).slice(-3) + '-' + ("000" + rightPart).slice(-3);
+    localStorage.setItem('incrementNumber', newCount);
+
+    // Agregar esta línea para guardar el número de incremento actual en el archivo PDF
+    localStorage.setItem('countForPDF', count);
+
+    return newCount;
+};
+
+document.getElementById('nuevo').addEventListener('click', function () {
+    location.reload();
+});

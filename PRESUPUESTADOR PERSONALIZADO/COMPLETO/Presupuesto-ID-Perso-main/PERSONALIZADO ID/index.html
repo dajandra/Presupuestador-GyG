@@ -15,7 +15,8 @@
     <section>
         <div class="cabecera">
             <h1 class="titulo" style="font-size: 40px;">Generador de Presupuesto</h1>
-            <h2>Internacion Domiciliaria</h2>
+            <h2>PERSONALIZADO</h2>
+            <h2>Internacion Domiciliaria - Completo</h2>
             <hr>
         </div>
 
@@ -29,7 +30,6 @@
         <div class="botones">
             <button id="savePdf" class="btnfos btnfos-3">Guardar PDF</button>
             <button id="nuevo" class="btnfos btnfos-4">Borrar Datos</button>
-            <button id="nuevoPrep" class="btnfos btnfos-5">Nuevo Presupuesto</button>
         </div>
     </section>
 
@@ -54,6 +54,14 @@
                             required>
                     </div>
 
+                    <div class="item">
+                        <label for="fecha" class="form-label">Fecha Emision:</label> <br> <BR>
+                        <input type="date" id="fecha" class="form-control item1" placeholder="" required>
+                    </div>
+                    <div class="item">
+                        <label for="fecha-renovacion" class="form-label">Fecha de Renovacion:</label> <br> <BR>
+                        <input type="date" id="fecha-renovacion" class="form-control item1" placeholder="" required>
+                    </div>
                     <div class="item">
                         <p>IVA:</p>
                         <select id="lista">
@@ -140,7 +148,7 @@
             <div id="todo" class="hojas">
                 <div id="todoPrep" class="hojas2">
                     <div id="contentToConvert" class="container-imp fondodiv"
-                        style="background-image: url(img/fondo7.jpg);">
+                        style="background-image: url(img/fondo1.jpg);">
                         <div class="top">
                             <div>
                                 <img src="logo.png" alt="Logo de la Empresa" class="logo">
@@ -150,7 +158,7 @@
                                     <h2>Presupuesto N° <span id="vista-numpdf"></span></h2>
                                     
                                 </div>
-                                <h3 class="">Implantech</h3>
+                                <h3 class="">Internacion Domiciliaria</h3>
                             </div>
 
 
@@ -183,7 +191,8 @@
                             </div>
 
                             <div class="datos-cliente">
-                                <p id="fecha-actual">FECHA:</p>
+                                <p>FECHA: <span id="vista-fecha"></span></p>
+                                <p>FECHA RENOVACION: <span id="vista-fecha-renovacion"></span></p>
                                 <p>AFILIADO: <span id="vista-afiliado"></span></p>
                                 <p>N° AFILIADO: <span id="vista-nroAfiliado"></span></p>
                                 <p>DOMICILIO: <span id="vista-domicilio"></span></p>

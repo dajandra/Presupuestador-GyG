@@ -3,10 +3,16 @@ document.getElementById('agregarDatos').addEventListener('click', function () {
     var afiliado = document.getElementById("afiliado").value;
     var nroAfiliado = document.getElementById("nroAfiliado").value;
     var domicilio = document.getElementById("domicilio").value;
-    var fecha = document.getElementById("fecha-renovacion").value;
+    var fechareno = document.getElementById("fecha-renovacion").value;
 
 
-    document.getElementById("vista-fecha-renovacion").textContent = new Date(fecha).toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' });
+    document.getElementById("vista-fecha-renovacion").textContent = new Date(fechareno).toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' });
+
+    var fecha = document.getElementById("fecha").value;
+
+
+
+    document.getElementById("vista-fecha").textContent = fecha;
 
     document.getElementById("vista-afiliado").textContent = afiliado;
     document.getElementById("vista-nroAfiliado").textContent = nroAfiliado;
@@ -26,8 +32,7 @@ document.getElementById('agregarDatos').addEventListener('click', function () {
 
     document.getElementById("vista-nombre-cliente").textContent = clientName;
     document.getElementById("vista-cuit-cliente").textContent = cuitCliente;
-    document.getElementById("vista-observaciones").textContent = observaciones;
-
+    document.getElementById("vista-observaciones").innerHTML = observaciones.replace(/\n/g, '<br>');
 
     calcularTotal();
 });
@@ -49,7 +54,9 @@ function agregarHoja() {
     // Cambiar el id de la tabla
     tabla.id = 'mostrarDatos' + contadorTablas;
 
-    document.getElementById("total").id = "total1";
+    document.getElementById("total").id = "total" + contadorTablas;
+    document.getElementById("stotal").id = "stotal" + contadorTablas;
+    document.getElementById("totalIVA").id = "totalIVA" + contadorTablas;
 
     while (tabla.rows.length > 1) { // Empezamos desde la segunda fila (índice 1)
         tabla.deleteRow(1);
@@ -61,7 +68,6 @@ function agregarHoja() {
 
 
 
-
 let contador = 0;
 
 function agregarItems() {
@@ -69,15 +75,17 @@ function agregarItems() {
 
     if (contador < 6) {
         agregar1();
-    } else if (contador == 6) {
+    } else if (contador == 6 || contador == 12) {
         agregarHoja();
     } else if (contador > 6 && contador < 12) {
         agregar2();
-    }
+    } else if (contador > 12 && contador < 18) {
+        agregar3();
+    }   
 
     calcularTotal();
     // Mostrar alerta si se ha alcanzado el límite de tablas
-    if (contador > 12) {
+    if (contador > 18) {
         alert('No se pueden agregar más tablas.');
     }
 
@@ -95,7 +103,7 @@ function agregar1() {
     let fila = document.createElement('tr');
     fila.innerHTML = `
     <tbody>
-            <td><p>${descripcion}</p></td>
+            <td><p>${descripcion.replace(/\n/g, '<br>')}</p></td>
             <td><p>${cantidad}</p></td>
             <td><p>${precioUnitario}</p></td>
             <td><p>${subtotal}</p></td>
@@ -119,7 +127,7 @@ function agregar2() {
     let fila = document.createElement('tr');
     fila.innerHTML = `
     <tbody>
-            <td><p>${descripcion}</p></td>
+            <td><p>${descripcion.replace(/\n/g, '<br>')}</p></td>
             <td><p>${cantidad}</p></td>
             <td><p>${precioUnitario}</p></td>
             <td><p>${subtotal}</p></td>
@@ -134,13 +142,28 @@ function agregar2() {
 
 }
 
-window.onload = function () {
-    var fecha = new Date();
-    var dia = fecha.getDate();
-    var mes = fecha.getMonth() + 1;
-    var anio = fecha.getFullYear();
+function agregar3() {
+    let descripcion = document.getElementById('descripcion').value;
+    let cantidad = document.getElementById('cantidad').value;
+    let precioUnitario = document.getElementById('precioUnitario').value;
+    var subtotal = cantidad * precioUnitario;
 
-    document.getElementById("fecha-actual").innerHTML = "FECHA: " + dia + "/" + mes + "/" + anio;
+    let fila = document.createElement('tr');
+    fila.innerHTML = `
+    <tbody>
+            <td><p>${descripcion.replace(/\n/g, '<br>')}</p></td>
+            <td><p>${cantidad}</p></td>
+            <td><p>${precioUnitario}</p></td>
+            <td><p>${subtotal}</p></td>
+    </tbody>
+    <button onclick="eliminar(this)" class="btnel"></button>
+    `;
+
+    document.getElementById('mostrarDatos2').appendChild(fila);
+
+    calcularTotal();
+
+
 }
 
 
@@ -189,6 +212,7 @@ document.getElementById('nuevoPrep').addEventListener('click', function () {
 function calcularTotal() {
     var tabla1 = document.getElementById('mostrarDatos');
     var tabla2 = document.getElementById('mostrarDatos1');
+
     var sum = 0;
   
     if (tabla1 !== null) {
@@ -208,6 +232,16 @@ function calcularTotal() {
         }
       }
     }
+
+    var tabla3 = document.getElementById('mostrarDatos2');
+    if (tabla3 !== null) {
+        for (var i = 0; i < tabla3.rows.length; i++) {
+          var value = tabla3.rows[i].cells[tabla3.rows[i].cells.length - 1].innerText;
+          if (!isNaN(value)) {
+            sum += parseFloat(value);
+          }
+        }
+      }
   
     var valor = document.getElementById('porcIVA');
     var porcentaje = sum * valor.value / 100; // Ajusta este valor al porcentaje que deseas sumar
@@ -218,10 +252,15 @@ function calcularTotal() {
 
     document.getElementById('stotal').textContent = stotal;
     document.getElementById('totalIVA').textContent = totaliva;
-
-
     document.getElementById('total').textContent = total;
+
+
     document.getElementById('total1').textContent = document.getElementById('total').textContent;
+    document.getElementById('stotal1').textContent = document.getElementById('stotal').textContent;
+    document.getElementById('totalIVA1').textContent = document.getElementById('totalIVA').textContent;
+
+
+
 }
 // Asegúrate de que este código se ejecute después de que la tabla esté creada
 var table = document.getElementById('mostrarDatos');
@@ -283,25 +322,3 @@ document.getElementById('nuevo').addEventListener('click', function () {
 
 });
 
-
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyAKgCOHRuQf_S-LaUSXiY_44tYcytudx74",
-  authDomain: "presudb.firebaseapp.com",
-  projectId: "presudb",
-  storageBucket: "presudb.appspot.com",
-  messagingSenderId: "5657236109",
-  appId: "1:5657236109:web:e0713bcc3f8618b83ec8c4",
-  measurementId: "G-1LWPEWK6S7"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);

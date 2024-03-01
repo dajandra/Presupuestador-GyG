@@ -4,12 +4,23 @@ document.getElementById('agregarDatos').addEventListener('click', function () {
     var nroAfiliado = document.getElementById("nroAfiliado").value;
     var domicilio = document.getElementById("domicilio").value;
     var medico = document.getElementById("medico").value;
+
     var numpdf = document.getElementById("numpdf").value;
 
-
-    document.getElementById("vista-medico").textContent = medico;
     document.getElementById("vista-numpdf").textContent = numpdf;
 
+    document.getElementById("vista-medico").textContent = medico;
+
+    var fechareno = document.getElementById("fecha-renovacion").value;
+
+
+    document.getElementById("vista-fecha-renovacion").textContent = new Date(fechareno).toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' });
+
+    var fecha = document.getElementById("fecha").value;
+
+
+
+    document.getElementById("vista-fecha").textContent = fecha;
     document.getElementById("vista-afiliado").textContent = afiliado;
     document.getElementById("vista-nroAfiliado").textContent = nroAfiliado;
     document.getElementById("vista-domicilio").textContent = domicilio;
@@ -32,7 +43,28 @@ document.getElementById('agregarDatos').addEventListener('click', function () {
     document.getElementById("vista-observaciones").innerHTML = observaciones.replace(/\n/g, '<br>');
 
 
-    calcularTotal();
+    var montototal = document.getElementById("monto-total").value;
+
+    var sum = parseFloat(montototal);
+
+    var valor = document.getElementById('porcIVA');
+    var porcentaje = sum * valor.value / 100; // Ajusta este valor al porcentaje que deseas sumar
+    var stotal = sum.toLocaleString('es-ES');
+    var total = (sum + porcentaje).toLocaleString('es-ES'); // Agregar el formato de puntos para separar grupos
+
+    var totaliva = porcentaje.toLocaleString('es-ES');
+
+    document.getElementById('stotal').textContent = stotal;
+
+    document.getElementById('totalIVA').textContent = totaliva;
+
+
+
+    document.getElementById('total').textContent = total;
+    document.getElementById('total1').textContent = document.getElementById('total').textContent;
+    document.getElementById('stotal1').textContent = document.getElementById('stotal').textContent;
+    document.getElementById('totalIVA1').textContent = document.getElementById('totalIVA').textContent;
+
 });
 
 let contadorTablas = 1;
@@ -59,7 +91,7 @@ function agregarHoja() {
     }
 
     contadorTablas++; // Incrementar el contador de tablas
-    calcularTotal();
+
 }
 
 
@@ -77,8 +109,6 @@ function agregarItems() {
     } else if (contador > 6 && contador < 12) {
         agregar2();
     }
-
-    calcularTotal();
     // Mostrar alerta si se ha alcanzado el límite de tablas
     if (contador > 11) {
         alert('No se pueden agregar más tablas.');
@@ -91,60 +121,38 @@ document.getElementById('agregarItems').addEventListener('click', agregarItems);
 
 function agregar1() {
     let descripcion = document.getElementById('descripcion').value;
-    let cantidad = document.getElementById('cantidad').value;
-    let precioUnitario = document.getElementById('precioUnitario').value;
-    var subtotal = cantidad * precioUnitario;
 
     let fila = document.createElement('tr');
     fila.innerHTML = `
     <tbody>
             <td><p>${descripcion.replace(/\n/g, '<br>')}</p></td>
-            <td><p>${cantidad}</p></td>
-            <td><p>${precioUnitario}</p></td>
-            <td><p>${subtotal}</p></td>
     </tbody>
     <button onclick="eliminar(this)" class="btnel"></button>
     `;
 
     document.getElementById('mostrarDatos').appendChild(fila);
 
-    calcularTotal();
 
 
 }
 
 function agregar2() {
     let descripcion = document.getElementById('descripcion').value;
-    let cantidad = document.getElementById('cantidad').value;
-    let precioUnitario = document.getElementById('precioUnitario').value;
-    var subtotal = cantidad * precioUnitario;
 
     let fila = document.createElement('tr');
     fila.innerHTML = `
     <tbody>
             <td><p>${descripcion.replace(/\n/g, '<br>')}</p></td>
-            <td><p>${cantidad}</p></td>
-            <td><p>${precioUnitario}</p></td>
-            <td><p>${subtotal}</p></td>
     </tbody>
     <button onclick="eliminar(this)" class="btnel"></button>
     `;
 
     document.getElementById('mostrarDatos1').appendChild(fila);
 
-    calcularTotal();
 
 
 }
 
-window.onload = function () {
-    var fecha = new Date();
-    var dia = fecha.getDate();
-    var mes = fecha.getMonth() + 1;
-    var anio = fecha.getFullYear();
-
-    document.getElementById("fecha-actual").innerHTML = "FECHA: " + dia + "/" + mes + "/" + anio;
-}
 
 
 function eliminarCeldasDeTabla(tabla) {
@@ -156,7 +164,6 @@ function eliminarCeldasDeTabla(tabla) {
 function eliminar(elemento) {
     elemento.parentElement.remove();
     contador--; // Restar 1 al contador de celdas
-    calcularTotal();
 }
 
 
@@ -179,12 +186,6 @@ document.getElementById('savePdf').addEventListener('click', function () {
 
 
 });
-
-document.getElementById('nuevoPrep').addEventListener('click', function () {
-    incrementAndSave();
-    location.reload();
-});
-
 
 
 
@@ -262,5 +263,4 @@ document.getElementById('nuevo').addEventListener('click', function () {
     location.reload()
 
 });
-
 

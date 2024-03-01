@@ -6,6 +6,16 @@ document.getElementById('agregarDatos').addEventListener('click', function () {
     var medico = document.getElementById("medico").value;
     var numpdf = document.getElementById("numpdf").value;
 
+    var fechareno = document.getElementById("fecha-renovacion").value;
+
+
+    document.getElementById("vista-fecha-renovacion").textContent = new Date(fechareno).toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' });
+
+    var fecha = document.getElementById("fecha").value;
+
+
+
+    document.getElementById("vista-fecha").textContent = fecha;
 
     document.getElementById("vista-medico").textContent = medico;
     document.getElementById("vista-numpdf").textContent = numpdf;
@@ -180,13 +190,6 @@ document.getElementById('savePdf').addEventListener('click', function () {
 
 });
 
-document.getElementById('nuevoPrep').addEventListener('click', function () {
-    incrementAndSave();
-    location.reload();
-});
-
-
-
 
 
 function calcularTotal() {
@@ -264,3 +267,34 @@ document.getElementById('nuevo').addEventListener('click', function () {
 });
 
 
+document.getElementById('nuevoPrep').addEventListener('click', function () {
+    incrementAndSave();
+    location.reload();
+});
+
+
+function incrementAndSave() {
+    var count = localStorage.getItem('incrementNumber');
+    if (!count) {
+        count = '001-346';
+    }
+
+    var parts = count.split('-');
+    var leftPart = parseInt(parts[0]);
+    var rightPart = parseInt(parts[1]);
+
+    if (rightPart < 999) {
+        rightPart++;
+    } else {
+        rightPart = 0;
+        leftPart++;
+    }
+
+    var newCount = ("000" + leftPart).slice(-3) + '-' + ("000" + rightPart).slice(-3);
+    localStorage.setItem('incrementNumber', newCount);
+
+    // Agregar esta línea para guardar el número de incremento actual en el archivo PDF
+    localStorage.setItem('countForPDF', count);
+
+    return newCount;
+};

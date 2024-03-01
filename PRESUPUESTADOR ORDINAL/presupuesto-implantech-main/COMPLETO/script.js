@@ -4,6 +4,11 @@ document.getElementById('agregarDatos').addEventListener('click', function () {
     var nroAfiliado = document.getElementById("nroAfiliado").value;
     var domicilio = document.getElementById("domicilio").value;
     var medico = document.getElementById("medico").value;
+    var fecha = document.getElementById("fecha").value;
+
+
+
+    document.getElementById("vista-fecha").textContent = fecha;
 
 
     document.getElementById("vista-medico").textContent = medico;
@@ -27,7 +32,7 @@ document.getElementById('agregarDatos').addEventListener('click', function () {
 
     document.getElementById("vista-nombre-cliente").textContent = clientName;
     document.getElementById("vista-cuit-cliente").textContent = cuitCliente;
-    document.getElementById("vista-observaciones").textContent = observaciones;
+    document.getElementById("vista-observaciones").innerHTML = observaciones.replace(/\n/g, '<br>');
 
 
     calcularTotal();
@@ -98,7 +103,7 @@ function agregar1() {
     let fila = document.createElement('tr');
     fila.innerHTML = `
     <tbody>
-            <td><p>${descripcion}</p></td>
+            <td><p>${descripcion.replace(/\n/g, '<br>')}</p></td>
             <td><p>${cantidad}</p></td>
             <td><p>${precioUnitario}</p></td>
             <td><p>${subtotal}</p></td>
@@ -122,7 +127,7 @@ function agregar2() {
     let fila = document.createElement('tr');
     fila.innerHTML = `
     <tbody>
-            <td><p>${descripcion}</p></td>
+            <td><p>${descripcion.replace(/\n/g, '<br>')}</p></td>
             <td><p>${cantidad}</p></td>
             <td><p>${precioUnitario}</p></td>
             <td><p>${subtotal}</p></td>
@@ -194,21 +199,21 @@ function calcularTotal() {
     var sum = 0;
 
     if (tabla1 !== null) {
-      for (var i = 0; i < tabla1.rows.length; i++) {
-        var value = tabla1.rows[i].cells[tabla1.rows[i].cells.length - 1].innerText;
-        if (!isNaN(value)) {
-          sum += parseFloat(value);
+        for (var i = 0; i < tabla1.rows.length; i++) {
+            var value = tabla1.rows[i].cells[tabla1.rows[i].cells.length - 1].innerText;
+            if (!isNaN(value)) {
+                sum += parseFloat(value);
+            }
         }
-      }
     }
 
     if (tabla2 !== null) {
-      for (var i = 0; i < tabla2.rows.length; i++) {
-        var value = tabla2.rows[i].cells[tabla2.rows[i].cells.length - 1].innerText;
-        if (!isNaN(value)) {
-          sum += parseFloat(value);
+        for (var i = 0; i < tabla2.rows.length; i++) {
+            var value = tabla2.rows[i].cells[tabla2.rows[i].cells.length - 1].innerText;
+            if (!isNaN(value)) {
+                sum += parseFloat(value);
+            }
         }
-      }
     }
 
     var valor = document.getElementById('porcIVA');
@@ -218,14 +223,12 @@ function calcularTotal() {
 
     var totaliva = porcentaje.toLocaleString('es-ES');
 
-    
+
     document.getElementById('stotal').textContent = stotal;
-
     document.getElementById('totalIVA').textContent = totaliva;
-
-
-
     document.getElementById('total').textContent = total;
+
+
     document.getElementById('total1').textContent = document.getElementById('total').textContent;
     document.getElementById('stotal1').textContent = document.getElementById('stotal').textContent;
     document.getElementById('totalIVA1').textContent = document.getElementById('totalIVA').textContent;
@@ -286,7 +289,11 @@ document.addEventListener('DOMContentLoaded', function () {
     //incrementAndSave();
 });
 
-document.getElementById('nuevo').addEventListener('click', function () {
-    location.reload()
+document.getElementById('nuevoPrep').addEventListener('click', function () {
+    incrementAndSave();
+    location.reload();
+});
 
+document.getElementById('nuevo').addEventListener('click', function () {
+    location.reload();
 });

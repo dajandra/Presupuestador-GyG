@@ -3,11 +3,16 @@ document.getElementById('agregarDatos').addEventListener('click', function () {
     var afiliado = document.getElementById("afiliado").value;
     var nroAfiliado = document.getElementById("nroAfiliado").value;
     var domicilio = document.getElementById("domicilio").value;
-    var fecha = document.getElementById("fecha-renovacion").value;
+    var fechareno = document.getElementById("fecha-renovacion").value;
+
+
+    document.getElementById("vista-fecha-renovacion").textContent = new Date(fechareno).toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' });
+
+    var fecha = document.getElementById("fecha").value;
 
 
 
-    document.getElementById("vista-fecha-renovacion").textContent = fecha;
+    document.getElementById("vista-fecha").textContent = fecha;
     document.getElementById("vista-afiliado").textContent = afiliado;
     document.getElementById("vista-nroAfiliado").textContent = nroAfiliado;
     document.getElementById("vista-domicilio").textContent = domicilio;
@@ -26,7 +31,7 @@ document.getElementById('agregarDatos').addEventListener('click', function () {
 
     document.getElementById("vista-nombre-cliente").textContent = clientName;
     document.getElementById("vista-cuit-cliente").textContent = cuitCliente;
-    document.getElementById("vista-observaciones").textContent = observaciones;
+    document.getElementById("vista-observaciones").innerHTML = observaciones.replace(/\n/g, '<br>');
 
 
     var montototal = document.getElementById("monto-total").value;
@@ -115,7 +120,7 @@ function agregar1() {
     let fila = document.createElement('tr');
     fila.innerHTML = `
     <tbody>
-            <td><p>${descripcion}</p></td>
+            <td><p>${descripcion.replace(/\n/g, '<br>')}</p></td>
     </tbody>
     <button onclick="eliminar(this)" class="btnel"></button>
     `;
@@ -130,7 +135,7 @@ function agregar2() {
     let fila = document.createElement('tr');
     fila.innerHTML = `
     <tbody>
-            <td><p>${descripcion}</p></td>
+            <td><p>${descripcion.replace(/\n/g, '<br>')}</p></td>
     </tbody>
     <button onclick="eliminar(this)" class="btnel"></button>
     `;
@@ -139,14 +144,6 @@ function agregar2() {
 
 }
 
-window.onload = function () {
-    var fecha = new Date();
-    var dia = fecha.getDate();
-    var mes = fecha.getMonth() + 1;
-    var anio = fecha.getFullYear();
-
-    document.getElementById("fecha-actual").innerHTML = "FECHA: " + dia + "/" + mes + "/" + anio;
-}
 
 
 function eliminarCeldasDeTabla(tabla) {

@@ -15,7 +15,8 @@
     <section>
         <div class="cabecera">
             <h1 class="titulo" style="font-size: 40px;">Generador de Presupuesto</h1>
-            <h2>Implantech</h2>
+            <h2>PERSONALIZADO</h2>
+            <h2>Implantech - Descriptivo</h2>
             <hr>
         </div>
 
@@ -29,7 +30,6 @@
         <div class="botones">
             <button id="savePdf" class="btnfos btnfos-3">Guardar PDF</button>
             <button id="nuevo" class="btnfos btnfos-4">Borrar Datos</button>
-            <button id="nuevoPrep" class="btnfos btnfos-5">Nuevo Presupuesto</button>
         </div>
     </section>
 
@@ -54,6 +54,10 @@
                             required>
                     </div>
 
+                    <div class="item">
+                        <label for="fecha" class="form-label">Fecha Emision:</label> <br> <BR>
+                        <input type="date" id="fecha" class="form-control item1" placeholder="" required>
+                    </div>
                     <div class="item">
                         <p>IVA:</p>
                         <select id="lista">
@@ -97,6 +101,13 @@
 
                     </div>
 
+                    <div class="item">
+                        <label for="monto-total" class="form-label">Total:</label> <br>
+                        <input type="number" id="monto-total" class="form-control" placeholder="ej: $123000"
+                            min="1" required>
+
+                    </div>
+                    <BR>
                     <button type="button" id="agregarDatos" class="btn btn-success">Insertar Datos</button>
 
 
@@ -111,17 +122,6 @@
                                 <label for="descripcion" class="form-label">Descripción:</label>
                                 <textarea id="descripcion" name="descripcion" class="form-control"
                                     placeholder="ej: Silla Ortopedica"></textarea>
-                            </div>
-
-
-                            <div class="item">
-                                <label for="cantidad" class="form-label">Cantidad:</label>
-                                <input type="number" id="cantidad" name="cantidad" class="form-control item1"
-                                    placeholder="ej: 5">
-
-                                <label for="precioUnitario" class="form-label">Precio Unitario:</label>
-                                <input type="number" id="precioUnitario" name="precioUnitario"
-                                    class="form-control item2" placeholder="ej: 500">
                             </div>
                             <button type="button" id="agregarItems" class="btn btn-success">Agregar Linea</button>
 
@@ -140,7 +140,7 @@
             <div id="todo" class="hojas">
                 <div id="todoPrep" class="hojas2">
                     <div id="contentToConvert" class="container-imp fondodiv"
-                        style="background-image: url(img/fondo7.jpg);">
+                        style="background-image: url(img/fondo1.jpg);">
                         <div class="top">
                             <div>
                                 <img src="logo.png" alt="Logo de la Empresa" class="logo">
@@ -183,7 +183,7 @@
                             </div>
 
                             <div class="datos-cliente">
-                                <p id="fecha-actual">FECHA:</p>
+                                <p>FECHA: <span id="vista-fecha"></span></p>
                                 <p>AFILIADO: <span id="vista-afiliado"></span></p>
                                 <p>N° AFILIADO: <span id="vista-nroAfiliado"></span></p>
                                 <p>DOMICILIO: <span id="vista-domicilio"></span></p>

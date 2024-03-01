@@ -328,8 +328,7 @@ head {
 
 .fondodiv {
     background-size: cover;
-
-    background-repeat: no-repeat;
+    background-image: url(img/fondo1.jpg);
 }
 
 .item {

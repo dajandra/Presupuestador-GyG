@@ -170,10 +170,7 @@ function eliminar(elemento) {
 
 document.getElementById('savePdf').addEventListener('click', function () {
 
-    var incrementNumber = incrementAndSave();
-    var numberDiv = document.getElementById('count');
     var countForPDF = localStorage.getItem('countForPDF');
-    numberDiv.textContent = incrementNumber;
 
     var elements = window.document.querySelectorAll('#todoPrep, #todoPrep1');
     var opt = {
